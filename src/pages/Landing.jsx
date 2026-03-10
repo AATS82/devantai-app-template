@@ -1,10 +1,34 @@
+import { useEffect, useRef } from 'react'
+
 export default function Landing({ appName, modules, theme, onEnter }) {
     const landingHtml = import.meta.env.VITE_APP_LANDING || null
+    const containerRef = useRef(null)
+
+    useEffect(() => {
+        if (!containerRef.current) return
+
+        // ✅ Ejecutar scripts del HTML generado
+        const scripts = containerRef.current.querySelectorAll('script')
+        scripts.forEach(oldScript => {
+            const newScript = document.createElement('script')
+            newScript.textContent = oldScript.textContent
+            document.body.appendChild(newScript)
+            oldScript.remove()
+        })
+
+        // ✅ Forzar visibilidad de secciones como fallback
+        const sections = containerRef.current.querySelectorAll('.section')
+        sections.forEach(s => s.classList.add('visible'))
+
+    }, [landingHtml])
 
     if (landingHtml) {
         return (
             <>
-                <div dangerouslySetInnerHTML={{ __html: landingHtml }} />
+                <div
+                    ref={containerRef}
+                    dangerouslySetInnerHTML={{ __html: landingHtml }}
+                />
                 <button
                     onClick={onEnter}
                     style={{
@@ -21,7 +45,7 @@ export default function Landing({ appName, modules, theme, onEnter }) {
         )
     }
 
-    // Fallback si no hay landing generada
+    // Fallback
     return (
         <div style={{
             minHeight: '100vh', display: 'flex', flexDirection: 'column',

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './pages/Login'
+import LandingAutomotriz from './pages/Landingautomotriz'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
@@ -9,7 +10,14 @@ const modules = (import.meta.env.VITE_APP_MODULES || 'Módulo 1,Módulo 2').spli
 const theme = import.meta.env.VITE_APP_THEME || 'dark'
 const appName = import.meta.env.VITE_APP_NAME || 'Mi Sistema'
 const landingDataRaw = import.meta.env.VITE_APP_LANDING_DATA || null
-const landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
+
+let landingData = null
+try {
+  landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
+} catch (e) {
+  console.error('Error parsing landingData:', e)
+}
+
 document.documentElement.setAttribute('data-theme', theme)
 
 function AppContent() {
@@ -42,11 +50,4 @@ export default function App() {
       <AppContent />
     </AuthProvider>
   )
-}
-
-try {
-  landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
-} catch (e) {
-  console.error('Error parsing landingData:', e)
-  landingData = null
 }

@@ -192,7 +192,7 @@ export default function LandingAutomotriz({ data, onEnter }) {
 
             {/* ── HERO ── */}
             <section id="inicio" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                <div style={{ position: "absolute", inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=1800&q=80')", backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.35)" }} />
+                <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${data?.imagen_hero || 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=1800&q=80'}')`, backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.35)" }} />
                 <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(12,12,14,0.85) 0%, rgba(${primaryRgb},0.15) 100%)` }} />
                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 120, background: "linear-gradient(to bottom right, transparent 49%, #0c0c0e 50%)" }} />
                 <div style={{ position: "relative", textAlign: "center", padding: "0 1.5rem", maxWidth: 780, zIndex: 1 }}>
@@ -260,22 +260,30 @@ export default function LandingAutomotriz({ data, onEnter }) {
                         <button className="btn-primary" style={{ padding: "0.9rem 2rem", fontSize: "0.9rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Contáctanos hoy</button>
                     </AnimatedSection>
                     <AnimatedSection delay={150}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                            {[
-                                { t: "Garantía en todos los servicios", d: "Respaldamos cada trabajo con garantía escrita." },
-                                { t: "Técnicos certificados", d: "Personal con formación y certificación actualizada." },
-                                { t: "Repuestos originales", d: "Solo usamos piezas de calidad comprobada." },
-                                { t: "Presupuesto sin costo", d: "Diagnóstico y cotización completamente gratuita." },
-                            ].map((item, i) => (
-                                <div key={i} className="why-item">
-                                    <div style={{ width: 28, height: 28, minWidth: 28, color: primary, marginTop: 2 }}>{Icons.check}</div>
-                                    <div>
-                                        <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{item.t}</div>
-                                        <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{item.d}</div>
+                        {/* Imagen nosotros si existe, sino lista */}
+                        {d.imagen_nosotros ? (
+                            <div style={{ position: "relative", borderRadius: "2px", overflow: "hidden", aspectRatio: "4/3" }}>
+                                <img src={d.imagen_nosotros} alt="Nuestro equipo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 60%)` }} />
+                            </div>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                {[
+                                    { t: "Garantía en todos los servicios", d: "Respaldamos cada trabajo con garantía escrita." },
+                                    { t: "Técnicos certificados", d: "Personal con formación y certificación actualizada." },
+                                    { t: "Repuestos originales", d: "Solo usamos piezas de calidad comprobada." },
+                                    { t: "Presupuesto sin costo", d: "Diagnóstico y cotización completamente gratuita." },
+                                ].map((item, i) => (
+                                    <div key={i} className="why-item">
+                                        <div style={{ width: 28, height: 28, minWidth: 28, color: primary, marginTop: 2 }}>{Icons.check}</div>
+                                        <div>
+                                            <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{item.t}</div>
+                                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{item.d}</div>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </AnimatedSection>
                 </div>
             </section>

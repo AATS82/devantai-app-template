@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './pages/Login'
-import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
@@ -18,12 +17,12 @@ function AppContent() {
   const [activePage, setActivePage] = useState('dashboard')
   const [showLanding, setShowLanding] = useState(true)
 
-  if (showLanding) return <Landing
-    appName={appName}
-    modules={modules}
-    theme={theme}
-    onEnter={() => setShowLanding(false)}
-  />
+  if (showLanding) return (
+    <LandingAutomotriz
+      data={landingData}
+      onEnter={() => setShowLanding(false)}
+    />
+  )
 
   if (!user) return <Login />
 
@@ -44,9 +43,3 @@ export default function App() {
     </AuthProvider>
   )
 }
-if (showLanding) return (
-  <LandingAutomotriz
-    data={landingData}
-    onEnter={() => setShowLanding(false)}
-  />
-)

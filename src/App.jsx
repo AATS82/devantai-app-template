@@ -43,3 +43,10 @@ export default function App() {
     </AuthProvider>
   )
 }
+
+try {
+  landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
+} catch (e) {
+  console.error('Error parsing landingData:', e)
+  landingData = null
+}

@@ -127,7 +127,7 @@ function AnimatedSection({ children, className = "", delay = 0 }) {
 export default function LandingAutomotriz({ data = DEFAULT_DATA, onEnter }) {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const d = data || DEFAULT_DATA
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 60);
         window.addEventListener("scroll", onScroll);

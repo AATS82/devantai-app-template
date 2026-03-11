@@ -35,14 +35,16 @@ const LANDING_TEMPLATES = {
 }
 
 function getLandingTemplate(industria) {
+  console.log('industria recibida:', industria)
   if (!industria) return LandingAutomotriz
   const key = industria.toLowerCase()
     .replace(/á/g, 'a').replace(/é/g, 'e')
     .replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u')
+  console.log('key normalizada:', key)
   for (const [k, v] of Object.entries(LANDING_TEMPLATES)) {
     if (key.includes(k)) return v
   }
-  return LandingAutomotriz // fallback por ahora
+  return LandingAutomotriz
 }
 
 function AppContent() {
@@ -77,16 +79,4 @@ export default function App() {
       <AppContent />
     </AuthProvider>
   )
-}
-function getLandingTemplate(industria) {
-  console.log('industria recibida:', industria) // ← agrega esto
-  if (!industria) return LandingAutomotriz
-  const key = industria.toLowerCase()
-    .replace(/á/g, 'a').replace(/é/g, 'e')
-    .replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u')
-  console.log('key normalizada:', key) // ← y esto
-  for (const [k, v] of Object.entries(LANDING_TEMPLATES)) {
-    if (key.includes(k)) return v
-  }
-  return LandingAutomotriz
 }

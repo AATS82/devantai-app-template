@@ -9,6 +9,8 @@ import Layout from './components/Layout'
 const modules = (import.meta.env.VITE_APP_MODULES || 'Módulo 1,Módulo 2').split(',')
 const theme = import.meta.env.VITE_APP_THEME || 'dark'
 const appName = import.meta.env.VITE_APP_NAME || 'Mi Sistema'
+const landingDataRaw = import.meta.env.VITE_APP_LANDING_DATA || null
+const landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
 document.documentElement.setAttribute('data-theme', theme)
 
 function AppContent() {
@@ -42,3 +44,9 @@ export default function App() {
     </AuthProvider>
   )
 }
+if (showLanding) return (
+  <LandingAutomotriz
+    data={landingData}
+    onEnter={() => setShowLanding(false)}
+  />
+)

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './pages/Login'
 import LandingAutomotriz from './pages/Landingautomotriz'
+import LandingMedica from './pages/Landingmedica'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
@@ -20,13 +21,39 @@ try {
 
 document.documentElement.setAttribute('data-theme', theme)
 
+const LANDING_TEMPLATES = {
+  'automotriz': LandingAutomotriz,
+  'taller': LandingAutomotriz,
+  'vehiculos': LandingAutomotriz,
+  'mecanica': LandingAutomotriz,
+  'salud': LandingMedica,
+  'medico': LandingMedica,
+  'medica': LandingMedica,
+  'clinica': LandingMedica,
+  'dental': LandingMedica,
+  'veterinaria': LandingMedica,
+}
+
+function getLandingTemplate(industria) {
+  if (!industria) return LandingAutomotriz
+  const key = industria.toLowerCase()
+    .replace(/á/g, 'a').replace(/é/g, 'e')
+    .replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u')
+  for (const [k, v] of Object.entries(LANDING_TEMPLATES)) {
+    if (key.includes(k)) return v
+  }
+  return LandingAutomotriz // fallback por ahora
+}
+
 function AppContent() {
   const { user } = useAuth()
   const [activePage, setActivePage] = useState('dashboard')
   const [showLanding, setShowLanding] = useState(true)
 
+  const LandingTemplate = getLandingTemplate(landingData?.industria)
+
   if (showLanding) return (
-    <LandingAutomotriz
+    <LandingTemplate
       data={landingData}
       onEnter={() => setShowLanding(false)}
     />

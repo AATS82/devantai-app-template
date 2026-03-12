@@ -14,7 +14,10 @@ const landingDataRaw = import.meta.env.VITE_APP_LANDING_DATA || null
 
 let landingData = null
 try {
-  landingData = landingDataRaw ? JSON.parse(landingDataRaw) : null
+  if (landingDataRaw) {
+    const decoded = atob(landingDataRaw)  // decodifica Base64
+    landingData = JSON.parse(decoded)
+  }
 } catch (e) {
   console.error('Error parsing landingData:', e)
 }

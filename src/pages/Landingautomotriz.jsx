@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 // ============================================================
 // DEVANTAI — LANDING TEMPLATE: AUTOMOTRIZ
-// Personalización via props: negocio, servicios, contacto, tema
+// Variantes dinámicas: hero_variant, servicios_variant, nosotros_variant
 // ============================================================
 
 const DEFAULT_DATA = {
@@ -15,6 +15,9 @@ const DEFAULT_DATA = {
     horario: "{{HORARIO}}",
     anos_experiencia: "{{ANOS}}",
     clientes_atendidos: "{{CLIENTES}}",
+    hero_variant: "centered",
+    servicios_variant: "grid",
+    nosotros_variant: "image",
     servicios: [
         { titulo: "{{SERVICIO_1}}", descripcion: "{{DESC_1}}", icon: "wrench" },
         { titulo: "{{SERVICIO_2}}", descripcion: "{{DESC_2}}", icon: "car" },
@@ -69,7 +72,6 @@ function AnimatedSection({ children, className = "", delay = 0 }) {
     );
 }
 
-// Convierte hex a rgb string "r,g,b"
 function hexToRgb(hex) {
     const h = hex.replace('#', '');
     const r = parseInt(h.substring(0, 2), 16);
@@ -78,12 +80,204 @@ function hexToRgb(hex) {
     return `${r},${g},${b}`;
 }
 
+// ── HERO VARIANTS ──
+
+function HeroCentered({ d, primary, primaryRgb, fontTitulo, scrollTo }) {
+    return (
+        <section id="inicio" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${d.imagen_hero || 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=1800&q=80'}')`, backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.35)" }} />
+            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(12,12,14,0.85) 0%, rgba(${primaryRgb},0.15) 100%)` }} />
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 120, background: "linear-gradient(to bottom right, transparent 49%, #0c0c0e 50%)" }} />
+            <div style={{ position: "relative", textAlign: "center", padding: "0 1.5rem", maxWidth: 780, zIndex: 1 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: `rgba(${primaryRgb},0.15)`, border: `1px solid rgba(${primaryRgb},0.4)`, padding: "0.4rem 1rem", borderRadius: "2px", marginBottom: "1.5rem", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#f5a623" }}>
+                    ★ {d.anos_experiencia} años de experiencia ★
+                </div>
+                <h1 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "clamp(3rem, 8vw, 5.5rem)", fontWeight: 800, lineHeight: 1.0, letterSpacing: "-0.01em", marginBottom: "1.25rem", textTransform: "uppercase" }}>{d.nombre}</h1>
+                <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "rgba(255,255,255,0.8)", maxWidth: 580, margin: "0 auto 2.5rem", lineHeight: 1.6 }}>{d.slogan || d.descripcion}</p>
+                <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+                    <button className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Solicitar Cotización</button>
+                    <button className="btn-outline" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("servicios")}>Ver Servicios</button>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function HeroSplit({ d, primary, primaryRgb, fontTitulo, scrollTo }) {
+    return (
+        <section id="inicio" style={{ position: "relative", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", overflow: "hidden" }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "8rem 3rem 4rem 4rem", background: "#0c0c0e", zIndex: 1 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: `rgba(${primaryRgb},0.15)`, border: `1px solid rgba(${primaryRgb},0.4)`, padding: "0.4rem 1rem", borderRadius: "2px", marginBottom: "1.5rem", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#f5a623", width: "fit-content" }}>
+                    ★ {d.anos_experiencia} años de experiencia ★
+                </div>
+                <h1 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 800, lineHeight: 1.0, letterSpacing: "-0.01em", marginBottom: "1.25rem", textTransform: "uppercase" }}>{d.nombre}</h1>
+                <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.75)", marginBottom: "2.5rem", lineHeight: 1.7, maxWidth: 420 }}>{d.slogan || d.descripcion}</p>
+                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                    <button className="btn-primary" style={{ padding: "1rem 2rem", fontSize: "0.95rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Solicitar Cotización</button>
+                    <button className="btn-outline" style={{ padding: "1rem 2rem", fontSize: "0.95rem", borderRadius: "2px" }} onClick={() => scrollTo("servicios")}>Ver Servicios</button>
+                </div>
+            </div>
+            <div style={{ position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${d.imagen_hero || 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=1800&q=80'}')`, backgroundSize: "cover", backgroundPosition: "center" }} />
+                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to right, #0c0c0e 0%, transparent 30%, rgba(${primaryRgb},0.2) 100%)` }} />
+                <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 80, background: "linear-gradient(to right, #0c0c0e, transparent)" }} />
+            </div>
+        </section>
+    );
+}
+
+function HeroMinimal({ d, primary, primaryRgb, fontTitulo, scrollTo }) {
+    return (
+        <section id="inicio" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0c0c0e", borderBottom: `3px solid ${primary}`, overflow: "hidden" }}>
+            <div style={{ textAlign: "center", padding: "0 1.5rem", maxWidth: 900 }}>
+                <div style={{ fontSize: "0.75rem", fontFamily: `'${fontTitulo}', sans-serif`, letterSpacing: "0.3em", textTransform: "uppercase", color: primary, marginBottom: "2rem", fontWeight: 600 }}>
+                    {d.anos_experiencia} años — {d.ciudad}
+                </div>
+                <h1 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "clamp(3.5rem, 10vw, 7rem)", fontWeight: 800, lineHeight: 0.95, letterSpacing: "-0.03em", textTransform: "uppercase", marginBottom: "2rem" }}>
+                    {d.nombre}
+                </h1>
+                <div style={{ width: 60, height: 3, background: primary, margin: "0 auto 2rem" }} />
+                <p style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)", color: "rgba(255,255,255,0.6)", maxWidth: 560, margin: "0 auto 3rem", lineHeight: 1.7 }}>{d.slogan || d.descripcion}</p>
+                <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+                    <button className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Solicitar Cotización</button>
+                    <button className="btn-outline" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("servicios")}>Ver Servicios</button>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+// ── SERVICIOS VARIANTS ──
+
+function ServiciosGrid({ d, primary, primaryRgb, fontTitulo }) {
+    return (
+        <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "1.5rem" }}>
+            {(d.servicios || []).map((s, i) => (
+                <AnimatedSection key={i} delay={i * 100}>
+                    <div className="service-card">
+                        <div className="card-accent" />
+                        <div style={{ padding: "2rem", display: "flex", gap: "1.5rem", alignItems: "flex-start" }}>
+                            <div style={{ width: 52, height: 52, minWidth: 52, background: `rgba(${primaryRgb},0.12)`, border: `1px solid rgba(${primaryRgb},0.3)`, display: "flex", alignItems: "center", justifyContent: "center", color: primary }}>
+                                <span style={{ width: 24, height: 24 }}>{Icons[s.icon] || Icons.wrench}</span>
+                            </div>
+                            <div>
+                                <h3 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "1.3rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.02em", marginBottom: "0.5rem" }}>{s.titulo}</h3>
+                                <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6 }}>{s.descripcion}</p>
+                            </div>
+                        </div>
+                    </div>
+                </AnimatedSection>
+            ))}
+        </div>
+    );
+}
+
+function ServiciosList({ d, primary, primaryRgb, fontTitulo }) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            {(d.servicios || []).map((s, i) => (
+                <AnimatedSection key={i} delay={i * 80}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "2rem", padding: "1.75rem 2rem", background: "var(--bg3)", border: "1px solid var(--border)", borderLeft: `4px solid ${primary}`, transition: "all 0.3s" }}
+                        onMouseOver={e => e.currentTarget.style.background = `rgba(${primaryRgb},0.05)`}
+                        onMouseOut={e => e.currentTarget.style.background = "var(--bg3)"}>
+                        <div style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "3rem", fontWeight: 800, color: `rgba(${primaryRgb},0.25)`, minWidth: 60, lineHeight: 1 }}>
+                            {String(i + 1).padStart(2, "0")}
+                        </div>
+                        <div style={{ width: 40, height: 40, minWidth: 40, color: primary }}>
+                            <span style={{ width: 28, height: 28, display: "block" }}>{Icons[s.icon] || Icons.wrench}</span>
+                        </div>
+                        <div>
+                            <h3 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "1.2rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.02em", marginBottom: "0.3rem" }}>{s.titulo}</h3>
+                            <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.5 }}>{s.descripcion}</p>
+                        </div>
+                    </div>
+                </AnimatedSection>
+            ))}
+        </div>
+    );
+}
+
+function ServiciosFeatured({ d, primary, primaryRgb, fontTitulo }) {
+    const [featured, ...rest] = d.servicios || [];
+    return (
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: "1.5rem" }} className="grid-2">
+            {featured && (
+                <AnimatedSection>
+                    <div className="service-card" style={{ height: "100%" }}>
+                        <div className="card-accent" style={{ width: "100%" }} />
+                        <div style={{ padding: "3rem 2.5rem" }}>
+                            <div style={{ width: 64, height: 64, background: `rgba(${primaryRgb},0.15)`, border: `1px solid rgba(${primaryRgb},0.4)`, display: "flex", alignItems: "center", justifyContent: "center", color: primary, marginBottom: "1.5rem" }}>
+                                <span style={{ width: 32, height: 32 }}>{Icons[featured.icon] || Icons.wrench}</span>
+                            </div>
+                            <div style={{ fontSize: "0.7rem", fontFamily: `'${fontTitulo}', sans-serif`, letterSpacing: "0.2em", textTransform: "uppercase", color: primary, marginBottom: "0.75rem", fontWeight: 600 }}>Servicio principal</div>
+                            <h3 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "2rem", fontWeight: 800, textTransform: "uppercase", lineHeight: 1.1, marginBottom: "1rem" }}>{featured.titulo}</h3>
+                            <p style={{ color: "var(--muted)", fontSize: "1rem", lineHeight: 1.7 }}>{featured.descripcion}</p>
+                        </div>
+                    </div>
+                </AnimatedSection>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {rest.map((s, i) => (
+                    <AnimatedSection key={i} delay={i * 100}>
+                        <div className="service-card">
+                            <div className="card-accent" />
+                            <div style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                                <div style={{ width: 40, height: 40, minWidth: 40, background: `rgba(${primaryRgb},0.1)`, display: "flex", alignItems: "center", justifyContent: "center", color: primary }}>
+                                    <span style={{ width: 20, height: 20 }}>{Icons[s.icon] || Icons.wrench}</span>
+                                </div>
+                                <div>
+                                    <h3 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "1rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.3rem" }}>{s.titulo}</h3>
+                                    <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.5 }}>{s.descripcion}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </AnimatedSection>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// ── NOSOTROS VARIANTS ──
+
+function NosotrosImage({ d }) {
+    return (
+        <div style={{ position: "relative", borderRadius: "2px", overflow: "hidden", aspectRatio: "4/3" }}>
+            <img
+                src={d.imagen_nosotros || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80'}
+                alt="Nuestro equipo"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 60%)" }} />
+        </div>
+    );
+}
+
+function NosotrosStats({ d, primary, fontTitulo }) {
+    return (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+            {[
+                { n: d.anos_experiencia, l: "Años de experiencia" },
+                { n: d.clientes_atendidos, l: "Clientes atendidos" },
+                { n: "98%", l: "Tasa de satisfacción" },
+                { n: "24h", l: "Tiempo de respuesta" },
+            ].map((s, i) => (
+                <div key={i} style={{ padding: "2rem", background: "var(--bg3)", border: "1px solid var(--border)", borderTop: `3px solid ${primary}` }}>
+                    <div style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "2.8rem", fontWeight: 800, color: primary, lineHeight: 1, marginBottom: "0.5rem" }}>{s.n}</div>
+                    <div style={{ fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em" }}>{s.l}</div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+// ── COMPONENTE PRINCIPAL ──
+
 export default function LandingAutomotriz({ data, onEnter }) {
     const d = data || DEFAULT_DATA;
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // ✅ Tokens de diseño dinámicos
     const primary = d.color_primario || '#e63329';
     const secondary = d.color_secundario || '#b52820';
     const fontTitulo = d.font_titulo || 'Barlow Condensed';
@@ -104,6 +298,9 @@ export default function LandingAutomotriz({ data, onEnter }) {
 
     const iniciales = (d.nombre || "TA").split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
     const waLink = `https://wa.me/${(d.telefono || "").replace(/\D/g, "")}`;
+
+    // Props compartidos para variantes
+    const variantProps = { d, primary, primaryRgb, fontTitulo, fontCuerpo, scrollTo };
 
     return (
         <div style={{ fontFamily: `'${fontCuerpo}', sans-serif`, background: "#0c0c0e", color: "#f0f0f0", overflowX: "hidden" }}>
@@ -148,11 +345,12 @@ export default function LandingAutomotriz({ data, onEnter }) {
                 @media (max-width: 768px) {
                     .mobile-menu { display: flex !important; }
                     .desktop-nav { display: none !important; }
-                    .hero-title { font-size: 3.2rem !important; }
                     .grid-2 { grid-template-columns: 1fr !important; }
                     .grid-3 { grid-template-columns: 1fr !important; }
                     .stats-grid { grid-template-columns: 1fr 1fr !important; }
                     .contact-grid { grid-template-columns: 1fr !important; }
+                    .hero-split { grid-template-columns: 1fr !important; }
+                    .hero-split > div:last-child { min-height: 300px; }
                 }
             `}</style>
 
@@ -190,100 +388,63 @@ export default function LandingAutomotriz({ data, onEnter }) {
                 </div>
             )}
 
-            {/* ── HERO ── */}
-            <section id="inicio" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${data?.imagen_hero || 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=1800&q=80'}')`, backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.35)" }} />
-                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(12,12,14,0.85) 0%, rgba(${primaryRgb},0.15) 100%)` }} />
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 120, background: "linear-gradient(to bottom right, transparent 49%, #0c0c0e 50%)" }} />
-                <div style={{ position: "relative", textAlign: "center", padding: "0 1.5rem", maxWidth: 780, zIndex: 1 }}>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: `rgba(${primaryRgb},0.15)`, border: `1px solid rgba(${primaryRgb},0.4)`, padding: "0.4rem 1rem", borderRadius: "2px", marginBottom: "1.5rem", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#f5a623" }}>
-                        ★ {d.anos_experiencia} años de experiencia ★
-                    </div>
-                    <h1 className="titulo hero-title" style={{ fontSize: "clamp(3rem, 8vw, 5.5rem)", fontWeight: 800, lineHeight: 1.0, letterSpacing: "-0.01em", marginBottom: "1.25rem", textTransform: "uppercase" }}>{d.nombre}</h1>
-                    <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "rgba(255,255,255,0.8)", fontWeight: 400, maxWidth: 580, margin: "0 auto 2.5rem", lineHeight: 1.6 }}>{d.slogan || d.descripcion}</p>
-                    <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-                        <button className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Solicitar Cotización</button>
-                        <button className="btn-outline" style={{ padding: "1rem 2.5rem", fontSize: "1rem", borderRadius: "2px" }} onClick={() => scrollTo("servicios")}>Ver Servicios</button>
-                    </div>
-                </div>
-            </section>
+            {/* ── HERO — elige variante ── */}
+            {(() => {
+                if (d.hero_variant === "split") return <HeroSplit {...variantProps} />;
+                if (d.hero_variant === "minimal") return <HeroMinimal {...variantProps} />;
+                return <HeroCentered {...variantProps} />;
+            })()}
 
             {/* ── STATS BAR ── */}
             <section style={{ background: primary, padding: "2rem" }}>
                 <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", maxWidth: 900, margin: "0 auto", textAlign: "center", gap: "1rem" }}>
-                    {[{ n: d.anos_experiencia, l: "Años de experiencia" }, { n: d.clientes_atendidos, l: "Clientes atendidos" }, { n: "98%", l: "Satisfacción" }, { n: "24h", l: "Respuesta garantizada" }].map((s, i) => (
+                    {[
+                        { n: d.anos_experiencia, l: "Años de experiencia" },
+                        { n: d.clientes_atendidos, l: "Clientes atendidos" },
+                        { n: "98%", l: "Satisfacción" },
+                        { n: "24h", l: "Respuesta garantizada" },
+                    ].map((s, i) => (
                         <div key={i}>
-                            <div className="titulo" style={{ fontSize: "2.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>{s.n}</div>
+                            <div style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "2.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>{s.n}</div>
                             <div style={{ fontSize: "0.8rem", opacity: 0.85, letterSpacing: "0.05em", textTransform: "uppercase" }}>{s.l}</div>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* ── SERVICIOS ── */}
+            {/* ── SERVICIOS — elige variante ── */}
             <section id="servicios" style={{ background: "var(--bg2)", padding: "6rem 2rem" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto" }}>
                     <AnimatedSection>
                         <div className="divider"><div className="divider-line" /><div className="divider-dot" /><div className="divider-line" /></div>
                         <p style={{ textAlign: "center", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase", color: primary, marginBottom: "0.5rem" }}>Lo que hacemos</p>
-                        <h2 className="titulo" style={{ textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.01em", marginBottom: "3.5rem" }}>Nuestros Servicios</h2>
+                        <h2 style={{ fontFamily: `'${fontTitulo}', sans-serif`, textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.01em", marginBottom: "3.5rem" }}>Nuestros Servicios</h2>
                     </AnimatedSection>
-                    <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "1.5rem" }}>
-                        {(d.servicios || []).map((s, i) => (
-                            <AnimatedSection key={i} delay={i * 100}>
-                                <div className="service-card">
-                                    <div className="card-accent" />
-                                    <div style={{ padding: "2rem", display: "flex", gap: "1.5rem", alignItems: "flex-start" }}>
-                                        <div style={{ width: 52, height: 52, minWidth: 52, background: `rgba(${primaryRgb},0.12)`, border: `1px solid rgba(${primaryRgb},0.3)`, display: "flex", alignItems: "center", justifyContent: "center", color: primary }}>
-                                            <span style={{ width: 24, height: 24 }}>{Icons[s.icon] || Icons.wrench}</span>
-                                        </div>
-                                        <div>
-                                            <h3 className="titulo" style={{ fontSize: "1.3rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.02em", marginBottom: "0.5rem" }}>{s.titulo}</h3>
-                                            <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6 }}>{s.descripcion}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </AnimatedSection>
-                        ))}
-                    </div>
+                    {(() => {
+                        const props = { d, primary, primaryRgb, fontTitulo };
+                        if (d.servicios_variant === "list") return <ServiciosList {...props} />;
+                        if (d.servicios_variant === "featured") return <ServiciosFeatured {...props} />;
+                        return <ServiciosGrid {...props} />;
+                    })()}
                 </div>
             </section>
 
-            {/* ── POR QUÉ NOSOTROS ── */}
+            {/* ── POR QUÉ NOSOTROS — elige variante ── */}
             <section id="nosotros" style={{ background: "var(--bg)", padding: "6rem 2rem" }}>
                 <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }} className="grid-2">
                     <AnimatedSection>
                         <div className="divider"><div className="divider-line" /><div className="divider-dot" /><div className="divider-line" /></div>
                         <p style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase", color: primary, marginBottom: "0.5rem" }}>Por qué elegirnos</p>
-                        <h2 className="titulo" style={{ fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 800, textTransform: "uppercase", lineHeight: 1.1, marginBottom: "1.5rem" }}>Calidad y confianza en cada trabajo</h2>
+                        <h2 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "clamp(2rem,4vw,2.8rem)", fontWeight: 800, textTransform: "uppercase", lineHeight: 1.1, marginBottom: "1.5rem" }}>Calidad y confianza en cada trabajo</h2>
                         <p style={{ color: "var(--muted)", lineHeight: 1.7, marginBottom: "2rem" }}>{d.descripcion}</p>
                         <button className="btn-primary" style={{ padding: "0.9rem 2rem", fontSize: "0.9rem", borderRadius: "2px" }} onClick={() => scrollTo("contacto")}>Contáctanos hoy</button>
                     </AnimatedSection>
                     <AnimatedSection delay={150}>
-                        {/* Imagen nosotros si existe, sino lista */}
-                        {d.imagen_nosotros ? (
-                            <div style={{ position: "relative", borderRadius: "2px", overflow: "hidden", aspectRatio: "4/3" }}>
-                                <img src={d.imagen_nosotros} alt="Nuestro equipo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 60%)` }} />
-                            </div>
-                        ) : (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                                {[
-                                    { t: "Garantía en todos los servicios", d: "Respaldamos cada trabajo con garantía escrita." },
-                                    { t: "Técnicos certificados", d: "Personal con formación y certificación actualizada." },
-                                    { t: "Repuestos originales", d: "Solo usamos piezas de calidad comprobada." },
-                                    { t: "Presupuesto sin costo", d: "Diagnóstico y cotización completamente gratuita." },
-                                ].map((item, i) => (
-                                    <div key={i} className="why-item">
-                                        <div style={{ width: 28, height: 28, minWidth: 28, color: primary, marginTop: 2 }}>{Icons.check}</div>
-                                        <div>
-                                            <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{item.t}</div>
-                                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{item.d}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        {(() => {
+                            const props = { d, primary, primaryRgb, fontTitulo };
+                            if (d.nosotros_variant === "stats") return <NosotrosStats {...props} />;
+                            return <NosotrosImage {...props} />;
+                        })()}
                     </AnimatedSection>
                 </div>
             </section>
@@ -294,7 +455,7 @@ export default function LandingAutomotriz({ data, onEnter }) {
                     <AnimatedSection>
                         <div className="divider"><div className="divider-line" /><div className="divider-dot" /><div className="divider-line" /></div>
                         <p style={{ textAlign: "center", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase", color: primary, marginBottom: "0.5rem" }}>Clientes</p>
-                        <h2 className="titulo" style={{ textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", marginBottom: "3.5rem" }}>Lo que dicen de nosotros</h2>
+                        <h2 style={{ fontFamily: `'${fontTitulo}', sans-serif`, textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", marginBottom: "3.5rem" }}>Lo que dicen de nosotros</h2>
                     </AnimatedSection>
                     <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }}>
                         {(d.testimonios || []).map((t, i) => (
@@ -326,12 +487,16 @@ export default function LandingAutomotriz({ data, onEnter }) {
                     <AnimatedSection>
                         <div className="divider"><div className="divider-line" /><div className="divider-dot" /><div className="divider-line" /></div>
                         <p style={{ textAlign: "center", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 600, fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase", color: primary, marginBottom: "0.5rem" }}>Contacto</p>
-                        <h2 className="titulo" style={{ textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", marginBottom: "3.5rem" }}>Hablemos de tu vehículo</h2>
+                        <h2 style={{ fontFamily: `'${fontTitulo}', sans-serif`, textAlign: "center", fontSize: "clamp(2rem,5vw,3rem)", fontWeight: 800, textTransform: "uppercase", marginBottom: "3.5rem" }}>Hablemos de tu negocio</h2>
                     </AnimatedSection>
                     <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "4rem", alignItems: "start" }}>
                         <AnimatedSection>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                                {[{ icon: "phone", label: "Teléfono", value: d.telefono }, { icon: "map", label: "Dirección", value: d.ciudad }, { icon: "clock", label: "Horario", value: d.horario }].map((item, i) => (
+                                {[
+                                    { icon: "phone", label: "Teléfono", value: d.telefono },
+                                    { icon: "map", label: "Dirección", value: d.ciudad },
+                                    { icon: "clock", label: "Horario", value: d.horario },
+                                ].map((item, i) => (
                                     <div key={i} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: "1.25rem", background: "var(--bg3)", border: "1px solid var(--border)" }}>
                                         <div style={{ width: 42, height: 42, minWidth: 42, background: `rgba(${primaryRgb},0.12)`, border: `1px solid rgba(${primaryRgb},0.3)`, display: "flex", alignItems: "center", justifyContent: "center", color: primary }}>
                                             <span style={{ width: 20, height: 20 }}>{Icons[item.icon]}</span>
@@ -353,12 +518,12 @@ export default function LandingAutomotriz({ data, onEnter }) {
                         </AnimatedSection>
                         <AnimatedSection delay={150}>
                             <div style={{ background: "var(--bg3)", border: "1px solid var(--border)", padding: "2.5rem" }}>
-                                <h3 className="titulo" style={{ fontSize: "1.4rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "1.5rem" }}>Envíanos un mensaje</h3>
+                                <h3 style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontSize: "1.4rem", fontWeight: 700, textTransform: "uppercase", marginBottom: "1.5rem" }}>Envíanos un mensaje</h3>
                                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                     <input type="text" placeholder="Tu nombre" />
                                     <input type="tel" placeholder="Tu teléfono" />
-                                    <input type="text" placeholder="Marca y modelo del vehículo" />
-                                    <textarea placeholder="Describe el problema o servicio que necesitas..." />
+                                    <input type="text" placeholder="¿En qué podemos ayudarte?" />
+                                    <textarea placeholder="Cuéntanos más sobre lo que necesitas..." />
                                     <button className="btn-primary" style={{ padding: "1rem", fontSize: "1rem", borderRadius: "2px", width: "100%" }}>Enviar Mensaje</button>
                                 </div>
                             </div>
@@ -373,7 +538,7 @@ export default function LandingAutomotriz({ data, onEnter }) {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "2rem", paddingBottom: "2rem", borderBottom: "1px solid var(--border)", marginBottom: "1.5rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                             <div style={{ width: 36, height: 36, background: primary, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 800 }}>{iniciales}</div>
-                            <span className="titulo" style={{ fontWeight: 700, fontSize: "1rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>{d.nombre}</span>
+                            <span style={{ fontFamily: `'${fontTitulo}', sans-serif`, fontWeight: 700, fontSize: "1rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>{d.nombre}</span>
                         </div>
                         <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
                             {["inicio", "servicios", "nosotros", "testimonios", "contacto"].map(s => (

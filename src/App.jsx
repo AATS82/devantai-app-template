@@ -87,7 +87,7 @@ function getLandingTemplate(industria, gastronomiaEstilo) {
       if (estiloKey.includes(k)) return v
     }
     // fallback gastronomía sin estilo definido → Cálida (la más universal)
-    return LandingGastronomiaCálida
+    return LandingGastronomiaCalida
   }
 
   // Resto de industrias

@@ -3,6 +3,9 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './pages/Login'
 import LandingAutomotriz from './pages/Landingautomotriz'
 import LandingMedica from './pages/Landingmedica'
+import LandingGastronomiaElegante from './pages/LandingGastronomiaElegante'
+import LandingGastronomiaCálida from './pages/LandingGastronomiaCálida'
+import LandingGastronomiaModerna from './pages/LandingGastronomiaModerna'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
@@ -25,28 +28,73 @@ try {
 document.documentElement.setAttribute('data-theme', theme)
 
 const LANDING_TEMPLATES = {
+  // Automotriz
   'automotriz': LandingAutomotriz,
   'taller': LandingAutomotriz,
   'vehiculos': LandingAutomotriz,
   'mecanica': LandingAutomotriz,
+  // Médica
   'salud': LandingMedica,
   'medico': LandingMedica,
   'medica': LandingMedica,
   'clinica': LandingMedica,
   'dental': LandingMedica,
   'veterinaria': LandingMedica,
+  // Gastronomía — Haiku elige el subtipo via gastronomia_estilo
+  'gastronomia': null, // resuelto dinámicamente abajo
+  'restaurante': null,
+  'cocina': null,
+  'cafe': null,
+  'bar': null,
+  'pasteleria': null,
+  'comida': null,
 }
 
-function getLandingTemplate(industria) {
-  console.log('industria recibida:', industria)
-  if (!industria) return LandingAutomotriz
-  const key = industria.toLowerCase()
+const GASTRONOMIA_ESTILOS = {
+  'elegante': LandingGastronomiaElegante,
+  'fino': LandingGastronomiaElegante,
+  'gourmet': LandingGastronomiaElegante,
+  'calida': LandingGastronomiaCálida,
+  'familiar': LandingGastronomiaCálida,
+  'casual': LandingGastronomiaCálida,
+  'tradicional': LandingGastronomiaCálida,
+  'moderna': LandingGastronomiaModerna,
+  'moderno': LandingGastronomiaModerna,
+  'minimalista': LandingGastronomiaModerna,
+  'contemporanea': LandingGastronomiaModerna,
+}
+
+function normalize(str) {
+  return (str || '').toLowerCase()
     .replace(/á/g, 'a').replace(/é/g, 'e')
     .replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u')
+}
+
+function getLandingTemplate(industria, gastronomiaEstilo) {
+  console.log('industria recibida:', industria, '| estilo:', gastronomiaEstilo)
+  if (!industria) return LandingAutomotriz
+
+  const key = normalize(industria)
   console.log('key normalizada:', key)
-  for (const [k, v] of Object.entries(LANDING_TEMPLATES)) {
-    if (key.includes(k)) return v
+
+  // ¿Es gastronomía?
+  const gastroKeys = ['gastronomia', 'restaurante', 'cocina', 'cafe', 'bar', 'pasteleria', 'comida']
+  const isGastro = gastroKeys.some(k => key.includes(k))
+
+  if (isGastro) {
+    const estiloKey = normalize(gastronomiaEstilo)
+    for (const [k, v] of Object.entries(GASTRONOMIA_ESTILOS)) {
+      if (estiloKey.includes(k)) return v
+    }
+    // fallback gastronomía sin estilo definido → Cálida (la más universal)
+    return LandingGastronomiaCálida
   }
+
+  // Resto de industrias
+  for (const [k, v] of Object.entries(LANDING_TEMPLATES)) {
+    if (v && key.includes(k)) return v
+  }
+
   return LandingAutomotriz
 }
 
@@ -55,7 +103,10 @@ function AppContent() {
   const [activePage, setActivePage] = useState('dashboard')
   const [showLanding, setShowLanding] = useState(true)
 
-  const LandingTemplate = getLandingTemplate(landingData?.industria)
+  const LandingTemplate = getLandingTemplate(
+    landingData?.industria,
+    landingData?.gastronomia_estilo
+  )
 
   if (showLanding) return (
     <LandingTemplate

@@ -259,7 +259,7 @@ function NosotrosStats({ d, terracota, terracotaRgb, fontTitulo }) {
 
 // ── COMPONENTE PRINCIPAL ──
 
-export default function LandingGastronomiaCálida({ data, onEnter }) {
+export default function LandingGastronomiaCalida({ data, onEnter }) {
     const d = data || DEFAULT_DATA;
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);

@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import LandingAutomotriz from './pages/Landingautomotriz'
 import LandingMedica from './pages/Landingmedica'
 import LandingGastronomiaElegante from './pages/LandingGastronomiaElegante'
-import LandingGastronomiaCálida from './pages/LandingGastronomiaCálida'
+import LandingGastronomiaCalida from './pages/LandingGastronomiaCalida'
 import LandingGastronomiaModerna from './pages/LandingGastronomiaModerna'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
@@ -54,10 +54,10 @@ const GASTRONOMIA_ESTILOS = {
   'elegante': LandingGastronomiaElegante,
   'fino': LandingGastronomiaElegante,
   'gourmet': LandingGastronomiaElegante,
-  'calida': LandingGastronomiaCálida,
-  'familiar': LandingGastronomiaCálida,
-  'casual': LandingGastronomiaCálida,
-  'tradicional': LandingGastronomiaCálida,
+  'calida': LandingGastronomiaCalida,
+  'familiar': LandingGastronomiaCalida,
+  'casual': LandingGastronomiaCalida,
+  'tradicional': LandingGastronomiaCalida,
   'moderna': LandingGastronomiaModerna,
   'moderno': LandingGastronomiaModerna,
   'minimalista': LandingGastronomiaModerna,

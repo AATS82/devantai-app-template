@@ -114,23 +114,24 @@ function AppContent() {
       <LandingTemplate
         data={landingData}
         onEnter={() => {
-          document.documentElement.setAttribute('data-theme', theme)
+          document.documentElement.removeAttribute('data-theme')
           setShowLanding(false)
         }}
       />
     )
   }
 
-  document.documentElement.setAttribute('data-theme', theme)
-
   if (!user) return <Login />
 
+  // Dashboard maneja su propio layout completo
+  if (activePage === 'dashboard') {
+    return <Dashboard modules={modules} onNavigate={setActivePage} />
+  }
+
+  // Módulos usan el Layout oscuro
   return (
     <Layout modules={modules} activePage={activePage} onNavigate={setActivePage}>
-      {activePage === 'dashboard'
-        ? <Dashboard modules={modules} />
-        : <ModulePage moduleName={activePage} />
-      }
+      <ModulePage moduleName={activePage} />
     </Layout>
   )
 }

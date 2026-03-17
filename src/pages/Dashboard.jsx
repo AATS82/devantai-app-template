@@ -282,6 +282,7 @@ export default function Dashboard({ modules: moduleNames = [] }) {
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                             {MODULOS.map((m) => (
                                 <div key={m.nombre} style={styles.mod}
+                                    onClick={() => onNavigate && onNavigate(m.nombre)}
                                     onMouseEnter={(e) => e.currentTarget.style.borderColor = AC}
                                     onMouseLeave={(e) => e.currentTarget.style.borderColor = t.br}
                                 >

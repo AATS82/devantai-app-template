@@ -23,7 +23,12 @@ const landingDataRaw = import.meta.env.VITE_APP_LANDING_DATA || null
 let landingData = null
 try {
   if (landingDataRaw) {
-    const decoded = atob(landingDataRaw)
+    const decoded = decodeURIComponent(
+      atob(landingDataRaw)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    )
     landingData = JSON.parse(decoded)
   }
 } catch (e) {

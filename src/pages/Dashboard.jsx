@@ -97,7 +97,7 @@ function Badge({ estado, dark }) {
 }
 
 // ── Componente principal ─────────────────────────────────────────────────────
-export default function Dashboard({ modules: moduleNames = [] }) {
+export default function Dashboard({ modules: moduleNames = [], onNavigate }) {
     // Leer tema guardado en localStorage; default "light"
     const [dark, setDark] = useState(() => {
         try { return localStorage.getItem("dvt_tema") === "dark"; } catch { }
@@ -196,7 +196,10 @@ export default function Dashboard({ modules: moduleNames = [] }) {
                     </span>
                     <nav style={{ display: "flex", gap: 2 }}>
                         {["Dashboard", "Ventas", "Clientes", "Reportes"].map((n) => (
-                            <a key={n} style={{ ...styles.navA, ...(n === "Dashboard" ? styles.navOn : {}) }}>{n}</a>
+                            <a key={n}
+                                onClick={() => n !== "Dashboard" && onNavigate && onNavigate(n)}
+                                style={{ ...styles.navA, ...(n === "Dashboard" ? styles.navOn : {}), cursor: "pointer" }}
+                            >{n}</a>
                         ))}
                     </nav>
                 </div>

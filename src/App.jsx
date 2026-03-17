@@ -10,10 +10,10 @@ import LandingFarmacia from './pages/LandingFarmacia'
 import LandingDentista from './pages/LandingDentista'
 import LandingOptica from './pages/LandingOptica'
 import LandingYoga from './pages/LandingYoga'
+import LandingPeluqueriaMascotas from './pages/LandingPeluqueriaMascotas'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
-import LandingPeluqueriaMascotas from './pages/LandingPeluqueriaMascotas'
 
 const modules = (import.meta.env.VITE_APP_MODULES || 'Módulo 1,Módulo 2').split(',')
 const theme = import.meta.env.VITE_APP_THEME || 'dark'
@@ -30,8 +30,6 @@ try {
   console.error('Error parsing landingData:', e)
 }
 
-// NO seteamos data-theme aquí — lo hace AppContent según si muestra landing o sistema
-
 const LANDING_TEMPLATES = {
   'automotriz': LandingAutomotriz,
   'taller': LandingAutomotriz,
@@ -46,6 +44,8 @@ const LANDING_TEMPLATES = {
   'farmacia': LandingFarmacia,
   'dentista': LandingDentista,
   'optica': LandingOptica,
+  'yoga': LandingYoga,
+  'peluqueria_mascotas': LandingPeluqueriaMascotas,
   'gastronomia': null,
   'restaurante': null,
   'cocina': null,
@@ -123,9 +123,14 @@ function AppContent() {
 
   if (!user) return <Login />
 
-  // Dashboard maneja su propio layout completo
+  // Dashboard maneja su propio layout completo — sin wrapper oscuro
   if (activePage === 'dashboard') {
-    return <Dashboard modules={modules} onNavigate={setActivePage} />
+    return (
+      <Dashboard
+        modules={modules}
+        onNavigate={setActivePage}
+      />
+    )
   }
 
   // Módulos usan el Layout oscuro

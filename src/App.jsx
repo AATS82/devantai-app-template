@@ -14,6 +14,7 @@ import LandingPeluqueriaMascotas from './pages/LandingPeluqueriaMascotas'
 import Dashboard from './pages/Dashboard'
 import ModulePage from './pages/ModulePage'
 import Layout from './components/Layout'
+import DashboardMed from './pages/DashboardMed'
 
 const modules = (import.meta.env.VITE_APP_MODULES || 'Módulo 1,Módulo 2').split(',')
 const theme = import.meta.env.VITE_APP_THEME || 'dark'
@@ -58,6 +59,7 @@ const LANDING_TEMPLATES = {
   'bar': null,
   'pasteleria': null,
   'comida': null,
+  'dashboard': DashboardMed,
 }
 
 const GASTRONOMIA_ESTILOS = {
@@ -81,7 +83,7 @@ function normalize(str) {
 }
 
 function getLandingTemplate(industria, gastronomiaEstilo) {
-  if (!industria) return LandingYoga
+  if (!industria) return Dashboard
 
   const key = normalize(industria)
 

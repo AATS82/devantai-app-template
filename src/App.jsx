@@ -83,7 +83,7 @@ function normalize(str) {
 }
 
 function getLandingTemplate(industria, gastronomiaEstilo) {
-  if (!industria) return Dashboard
+  if (!industria) return DashboardMed
 
   const key = normalize(industria)
 
